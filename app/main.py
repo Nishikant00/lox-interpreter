@@ -2,33 +2,43 @@ import sys
 
 def scanner(data):
     res=""
-    for i in data:
-        if i=='(':
+    error_code=0
+    lines=1
+    for i,ch in enumerate(data):
+        if ch=='(':
             res+="LEFT_PAREN ( null\n"
-        elif i==')':
+        elif ch==')':
             res+="RIGHT_PAREN ) null\n"
-        if i=='{':
+        elif ch=='{':
             res+="LEFT_BRACE { null\n"
-        elif i=='}':
+        elif ch=='}':
             res+="RIGHT_BRACE } null\n"
-        elif i==',':
+        elif ch==',':
             res+="COMMA , null\n"
-        elif i=='.':
+        elif ch=='.':
             res+="DOT . null\n"
-        elif i=='*':
+        elif ch=='*':
             res+="STAR * null\n"
-        elif i=='+':
+        elif ch=='+':
             res+="PLUS + null\n"
-        elif i=='-':
+        elif ch=='-':
             res+="MINUS - null\n"
-        elif i==';':
+        elif ch==';':
             res+="SEMICOLON ; null\n"
-        elif i=='/':
+        elif ch=='/':
             res+="FORWARD_SLASH / null\n"
+        elif ch=='\n':
+            lines+=1
+        else:
+            error_code=65
+            
+            print(f"[line {lines}] Error: Unexpected character: {ch}", file=sys.stderr)
+            
+
     print(res+"EOF  null")
+    exit(error_code)
 def main():
     # You can use print statements as follows for debugging, they'll be visible when running tests.
-    print("Logs from your program will appear here!", file=sys.stderr)
 
     if len(sys.argv) < 3:
         print("Usage: ./your_program.sh tokenize <filename>", file=sys.stderr)
