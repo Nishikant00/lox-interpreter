@@ -31,6 +31,8 @@ def scanner(data):
     lines = 1
     eql=0
     bang_eq=0
+    l_eq=0
+    g_eq=0
     for i,ch in enumerate(data):
         if ch in tokens:
             res += tokens[ch]
@@ -42,9 +44,27 @@ def scanner(data):
                 res+="BANG_EQUAL != null\n"
             else:   
                 res+="BANG ! null\n"
+        elif ch =='<':
+            if i+1<len(data) and data[i+1]=='=':
+                bang_eq+=1
+                res+="LESS_EQUAL <= null\n"
+            else:   
+                res+="LESS < null\n"
+        elif ch =='>':
+            if i+1<len(data) and data[i+1]=='=':
+                bang_eq+=1
+                res+="GREATER_EQUAL >= null\n"
+            else:   
+                res+="GREATER > null\n"
         elif ch=='=':
             if bang_eq==1:
                 bang_eq=0
+                continue
+            if l_eq==1:
+                l_eq=0
+                continue
+            if g_eq==1:
+                g_eq=0
                 continue
             if i+1<len(data) and data[i+1]=='=':
                 eql+=1
