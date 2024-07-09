@@ -22,7 +22,6 @@ def scanner(data):
         '+': "PLUS + null\n",
         '-': "MINUS - null\n",
         ';': "SEMICOLON ; null\n",
-        '/': "FORWARD_SLASH / null\n",
     }
         
     
@@ -33,11 +32,23 @@ def scanner(data):
     bang_eq=0
     l_eq=0
     g_eq=0
+    skip=0
     for i,ch in enumerate(data):
+        if skip==1:
+            if ch!='\n':
+                continue
+            else:
+                skip=0                
         if ch in tokens:
             res += tokens[ch]
         elif ch == '\n':
             lines += 1
+        elif ch=='/':
+            if i+1<len(data) and data[i+1]=='/':
+                skip=1
+                continue
+            else:
+                res+="SLASH / null\n"
         elif ch =='!':
             if i+1<len(data) and data[i+1]=='=':
                 bang_eq+=1
