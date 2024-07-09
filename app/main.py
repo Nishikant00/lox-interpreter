@@ -1,6 +1,13 @@
 import sys
 
-
+def scanner(data):
+    res=""
+    for i in data:
+        if i=='(':
+            res+=f"LEFT_PAREN ( null\n"
+        elif i==')':
+            res+=f"RIGHT_PAREN ) null\n"
+    print(res+"EOF  null")
 def main():
     # You can use print statements as follows for debugging, they'll be visible when running tests.
     print("Logs from your program will appear here!", file=sys.stderr)
@@ -20,9 +27,9 @@ def main():
         file_contents = file.read()
 
     if file_contents:
-        raise NotImplementedError("Scanner not implemented")
+        scanner(file_contents)
     else:
-        print("EOF  null") # Placeholder, remove this line when implementing the scanner
+        print("EOF  null") 
 
 
 if __name__ == "__main__":
