@@ -4,9 +4,13 @@ def scanner(data):
     res=""
     for i in data:
         if i=='(':
-            res+=f"LEFT_PAREN ( null\n"
+            res+="LEFT_PAREN ( null\n"
         elif i==')':
-            res+=f"RIGHT_PAREN ) null\n"
+            res+="RIGHT_PAREN ) null\n"
+        if i=='{':
+            res+="LEFT_BRACE { null\n"
+        elif i=='}':
+            res+="RIGHT_BRACE } null\n"
     print(res+"EOF  null")
 def main():
     # You can use print statements as follows for debugging, they'll be visible when running tests.
