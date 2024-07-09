@@ -11,6 +11,20 @@ def scanner(data):
             res+="LEFT_BRACE { null\n"
         elif i=='}':
             res+="RIGHT_BRACE } null\n"
+        elif i==',':
+            res+="COMMA , null\n"
+        elif i=='.':
+            res+="DOT . null\n"
+        elif i=='*':
+            res+="STAR * null\n"
+        elif i=='+':
+            res+="PLUS + null\n"
+        elif i=='-':
+            res+="MINUS - null\n"
+        elif i==';':
+            res+="SEMICOLON ; null\n"
+        elif i=='/':
+            res+="FORWARD_SLASH / null\n"
     print(res+"EOF  null")
 def main():
     # You can use print statements as follows for debugging, they'll be visible when running tests.
