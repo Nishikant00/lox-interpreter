@@ -22,6 +22,8 @@ def scanner(data):
         '+': "PLUS + null\n",
         '-': "MINUS - null\n",
         ';': "SEMICOLON ; null\n",
+        ' ':'',
+        '\t':'',
     }
         
     
@@ -56,6 +58,7 @@ def scanner(data):
             else:   
                 res+="BANG ! null\n"
         elif ch =='<':
+            
             if i+1<len(data) and data[i+1]=='=':
                 bang_eq+=1
                 res+="LESS_EQUAL <= null\n"
