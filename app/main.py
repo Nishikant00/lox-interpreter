@@ -30,29 +30,29 @@ def scanner(data):
     error_code = 0
     lines = 1
     eql=0
+    bang_eq=0
     for i,ch in enumerate(data):
         if ch in tokens:
             res += tokens[ch]
         elif ch == '\n':
             lines += 1
+        elif ch =='!':
+            if i+1<len(data) and data[i+1]=='=':
+                bang_eq+=1
+                res+="BANG_EQUAL != null\n"
+            else:   
+                res+="BANG ! null\n"
         elif ch=='=':
-            try:
-                if data[i+1]=='=':
-                    eql+=1
-                else:
-                    eql+=1
-                    ee_arr,e_arr=equality(eql)
-                    eql=0
-                    res
-                    res+=ee_arr
-                    res+=e_arr
-            except:
+            if bang_eq==1:
+                bang_eq=0
+                continue
+            if i+1<len(data) and data[i+1]=='=':
+                eql+=1
+            else:
                 eql+=1
                 ee_arr,e_arr=equality(eql)
                 eql=0
-                res+=ee_arr
-                res+=e_arr
-
+                res+=f"{ee_arr}{e_arr}"
         else:
             error_code = 65
             print(f"[line {lines}] Error: Unexpected character: {ch}", file=sys.stderr)
