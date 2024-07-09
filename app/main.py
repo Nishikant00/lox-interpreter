@@ -35,14 +35,35 @@ def scanner(data):
     l_eq=0
     g_eq=0
     skip=0
+    string_skip=0
+    strs=""
     for i,ch in enumerate(data):
         if skip==1:
             if ch!='\n':
                 continue
             else:
-                skip=0                
+                skip=0   
+        if string_skip==1:
+            if ch!='"':
+                if i==len(data)-1:
+                    error_code = 65
+                    print(f"[line {lines}] Error: Unterminated string.",file=sys.stderr)
+                    string_skip=0
+                    strs=""
+                strs+=ch
+                continue
+            
+            elif ch=='"' and len(strs)!=0:
+                res+=f'STRING "{strs}" {strs}\n' 
+                strs=""
+                string_skip=0
+                continue
+                    
         if ch in tokens:
             res += tokens[ch]
+        elif ch=='"':
+            string_skip=1
+            continue       
         elif ch == '\n':
             lines += 1
         elif ch=='/':
