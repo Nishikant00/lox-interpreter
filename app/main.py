@@ -25,7 +25,7 @@ def scanner(data):
         ' ':'',
         '\t':'',
     }
-        
+    operators=['+',' ','-',',','/','*','\n',')','(']
     
     res = ""
     error_code = 0
@@ -37,7 +37,10 @@ def scanner(data):
     skip=0
     string_skip=0
     strs=""
+    num=""
+    dot_done=0
     for i,ch in enumerate(data):
+
         if skip==1:
             if ch!='\n':
                 continue
@@ -58,9 +61,35 @@ def scanner(data):
                 strs=""
                 string_skip=0
                 continue
-                    
-        if ch in tokens:
-            res += tokens[ch]
+        elif ch.isnumeric() or ch=='.' and data[i-1].isnumeric() and i+1<len(data) and data[i+1].isnumeric():
+            num+=str(ch)
+            if ch=='.':
+                dot_done+=1
+            
+            if dot_done==2:
+                res+=f"NUMBER {num[:-1]} {num[:-1]}\n"
+                res+='DOT . null\n'
+                dot_done=0
+                num=""
+            elif i+1<len(data) and data[i+1] in operators:
+                res+=f"NUMBER {num} {num}.0\n"
+                num=""
+            elif i==len(data)-1:
+                if dot_done==0:
+                    res+=f"NUMBER {num} {num}.0\n"
+                else:
+                    res+=f"NUMBER {num} {num}\n"
+                num=""
+                dot_done=0
+            continue
+        elif ch=='.' and len(num)>0:
+            res+=f"NUMBER {num} {num}.0\n"
+            num=""
+            res+='DOT . null\n'
+            continue
+        
+        elif ch in tokens:
+            res +=tokens[ch]
         elif ch=='"':
             string_skip=1
             continue       
