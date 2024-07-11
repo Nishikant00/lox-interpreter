@@ -38,7 +38,10 @@ def scanner(data):
     string_skip=0
     strs=""
     num=""
+    alpha=""
     dot_done=0
+    alpha_e=0
+    
     for i,ch in enumerate(data):
 
         if skip==1:
@@ -61,6 +64,17 @@ def scanner(data):
                 strs=""
                 string_skip=0
                 continue
+        if ch.isalpha() or ch=='_' or (ch.isnumeric() and alpha_e==1):
+            alpha+=ch
+            alpha_e=1
+            if i==len(data)-1:
+                res+=f"IDENTIFIER {alpha} null\n"
+                alpha_e=0
+                alpha=""
+            elif i+1<len(data) and data[i+1] in operators:    
+                res+=f"IDENTIFIER {alpha} null\n"
+                alpha_e=0
+                alpha=""
         elif ch.isnumeric() or ch=='.' and data[i-1].isnumeric() and i+1<len(data) and data[i+1].isnumeric():
             num+=str(ch)
             if ch=='.':
@@ -72,13 +86,51 @@ def scanner(data):
                 dot_done=0
                 num=""
             elif i+1<len(data) and data[i+1] in operators:
-                res+=f"NUMBER {num} {num}.0\n"
+                if dot_done==0:
+                    res+=f"NUMBER {num} {num}.0\n"
+                else:
+                    if '.' in num and num.endswith('0'):
+                        cut=0
+                        for i in range(len(num)-1,-1,-1):
+                            if num[i]=='0' and num[i-1]=='0':
+                                cut+=1
+                            else:
+                                res+=f"NUMBER {num} {num[:-cut]}\n"
+                                break
+                    else:   
+                        res+=f"NUMBER {num} {num}\n"
                 num=""
+                dot_done=0
+            elif i+1<len(data) and data[i+1].isalpha():
+                if dot_done==0:
+                    res+=f"NUMBER {num} {num}.0\n"
+                else:
+                    if '.' in num and num.endswith('0'):
+                        cut=0
+                        for i in range(len(num)-1,-1,-1):
+                            if num[i]=='0' and num[i-1]=='0':
+                                cut+=1
+                            else:
+                                res+=f"NUMBER {num} {num[:-cut]}\n"
+                                break
+                    else:   
+                        res+=f"NUMBER {num} {num}\n"
+                num=""
+                dot_done=0
             elif i==len(data)-1:
                 if dot_done==0:
                     res+=f"NUMBER {num} {num}.0\n"
                 else:
-                    res+=f"NUMBER {num} {num}\n"
+                    if '.' in num and num.endswith('0'):
+                        cut=0
+                        for i in range(len(num)-1,-1,-1):
+                            if num[i]=='0' and num[i-1]=='0':
+                                cut+=1
+                            else:
+                                res+=f"NUMBER {num} {num[:-cut]}\n"
+                                break
+                    else:   
+                        res+=f"NUMBER {num} {num}\n"
                 num=""
                 dot_done=0
             continue
