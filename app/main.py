@@ -26,7 +26,7 @@ def scanner(data):
         '\t':'',
     }
     operators=['+',' ','-',',','/','*','\n',')','(']
-    
+    keywords={'class','print','or','for','if','nil','while','return','and','super','else','false','true','this','var','fun'}
     res = ""
     error_code = 0
     lines = 1
@@ -67,7 +67,12 @@ def scanner(data):
         if ch.isalpha() or ch=='_' or (ch.isnumeric() and alpha_e==1):
             alpha+=ch
             alpha_e=1
-            if i==len(data)-1:
+            if alpha in keywords:
+                res+=f"{alpha.upper()} {alpha} null\n"
+                alpha_e=0
+                alpha=""
+
+            elif i==len(data)-1:
                 res+=f"IDENTIFIER {alpha} null\n"
                 alpha_e=0
                 alpha=""
@@ -140,11 +145,12 @@ def scanner(data):
             res+='DOT . null\n'
             continue
         
-        elif ch in tokens:
-            res +=tokens[ch]
+        
         elif ch=='"':
             string_skip=1
             continue       
+        elif ch in tokens:
+            res +=tokens[ch]
         elif ch == '\n':
             lines += 1
         elif ch=='/':
