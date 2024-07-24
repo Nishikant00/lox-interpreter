@@ -1,4 +1,10 @@
 import sys
+
+def parse(file_contents):
+    i=0
+    while i<len(file_contents):
+        print(file_contents)
+        i+=1
 def equality(eql):
     num=eql//2
     rem=eql%2
@@ -210,8 +216,8 @@ def main():
 
     command = sys.argv[1]
     filename = sys.argv[2]
-
-    if command != "tokenize":
+    commands={"tokenize","parse"}
+    if command not in commands:
         print(f"Unknown command: {command}", file=sys.stderr)
         exit(1)
 
@@ -219,7 +225,10 @@ def main():
         file_contents = file.read()
 
     if file_contents:
-        scanner(file_contents)
+        if command=='tokenize':
+            scanner(file_contents)
+        elif command=='parse':
+            parse(file_contents)
     else:
         print("EOF  null") 
 
