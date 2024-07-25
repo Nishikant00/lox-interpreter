@@ -1,15 +1,26 @@
 import sys
 
 def parse(file_contents):
+    lexemes = {
+        'true':'true',
+        'false':'false',
+        'nil':'nil',
+    }
+    res=""
     i=0
-    while i<len(file_contents):
-        print(file_contents)
+    data=file_contents.split(' ')
+    while i<len(data):
+        if data[i] in lexemes:
+            res=f"{data[i]}"
         i+=1
+    print(res)
+        
 def equality(eql):
     num=eql//2
     rem=eql%2
     ee_arr=""
     e_arr=""
+
     for i in range(rem):
         e_arr+="EQUAL = null\n"
     for i in range(num):
