@@ -12,6 +12,13 @@ def parse(file_contents):
     while i<len(data):
         if data[i] in lexemes:
             res=f"{data[i]}"
+        elif data[i].isnumeric() :
+            res=f"{float(data[i])}"
+        elif data[i]=='0' or data[i]=='0.0':
+            res="0.0"
+        elif data[i].replace('.', '', 1).isnumeric():
+            res=f"{data[i]}"
+
         i+=1
     print(res)
         
