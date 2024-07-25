@@ -8,6 +8,7 @@ def parse(file_contents):
     }
     res=""
     i=0
+    string_sep=file_contents.split('"')
     data=file_contents.split(' ')
     while i<len(data):
         if data[i] in lexemes:
@@ -18,7 +19,11 @@ def parse(file_contents):
             res="0.0"
         elif data[i].replace('.', '', 1).isnumeric():
             res=f"{data[i]}"
-
+        else:
+            for j in string_sep:
+                if j=="":
+                    continue
+                res=f"{j}"
         i+=1
     print(res)
         
