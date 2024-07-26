@@ -1,6 +1,30 @@
 import sys
+def string_fn(string_sep):
+    res=""
+    for j in string_sep:
+        if j=="" or j=='(group' or j==')':
+            continue
+        res=f"{j}"
+    return res
+def string_fn_MOD(file_contents):
+    res=""
+    for i,j in enumerate(file_contents):
+        if j=='(' and file_contents[i+1]==')' and i+1<len(file_contents) or ('(' in file_contents and ')' not in file_contents) or ('(' not in file_contents and ')' in file_contents) :
+            error_code=65
+            print("Error: Unmatched parentheses.",file=sys.stderr)
+            break
+        elif j=="(":
+            res+="(group "
+            continue
+        res+=f"{j}"
+    if '"' in res:
+        res=res.split('"')
+        res=string_fn(res)
+        res="(group "+res+")"
+    return res
 
 def parse(file_contents):
+    
     lexemes = {
         'true':'true',
         'false':'false',
@@ -19,14 +43,17 @@ def parse(file_contents):
             res="0.0"
         elif data[i].replace('.', '', 1).isnumeric():
             res=f"{data[i]}"
+        elif data[i][0]=='(' or data[i][0]==')' :
+            res+=string_fn_MOD(file_contents)
+            
         else:
-            for j in string_sep:
-                if j=="":
-                    continue
-                res=f"{j}"
+            res=string_fn(string_sep)
         i+=1
+    
     print(res)
-        
+    if res=="":
+        exit(65)
+    exit(0)   
 def equality(eql):
     num=eql//2
     rem=eql%2
